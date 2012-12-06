@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Contas v0.0.1</title>
+    </h:head>
+    <h:body>
+        
+            <h:form>
+                <p:panel id="newExpenseForm" header="Criar Conta">
+                    <p:messages id="messages"/>
+                    <h:panelGrid columns="2">
+                    <h:outputLabel value="Nome *" for="name" />
+                    <p:inputText id="name" value="#{expenseMBean.expense.name}" maxlength="128" size="25" title="Nome" required="true" requiredMessage="O campo Nome é obrigatório.">
+                        <f:validateLength minimum="1" maximum="128"/>
+                    </p:inputText>
+                    <h:outputLabel value="Valor *" for="value" />
+                    <p:inputText id="value" value="#{expenseMBean.expense.value}" title="Valor" required="true" requiredMessage="O campo Valor é obrigatório.">
+                       <!--<f:validateRegex pattern="\d{1,6}\.\d{1,2}"/>-->
+                        
+                       <f:convertNumber maxFractionDigits="2"
+                            groupingUsed="true"
+                            currencySymbol="R$"
+                            maxIntegerDigits="6"
+                            type="currency"
+                            />
+                       
+                    </p:inputText>
+                    <h:outputLabel value="Descrição " for="description" />
+                    <p:inputTextarea id="description" value="#{expenseMBean.expense.description}" title="Descrição" />
+                    <br/>
+                    <h:outputLabel value="Categoria da Conta *" for="categoryId" />
+                    <h:selectOneMenu id="categoryId" value="#{expenseMBean.selectedCategory}" title="Categoria" required="true" requiredMessage="O campo Categoria é obrigatório.">
+                         <f:selectItem itemValue="" itemLabel="Selecione..."/>
+                         <f:selectItems value="#{expenseMBean.categoriesForSelect}"/>
+                     </h:selectOneMenu>
+                    </h:panelGrid>
+                </p:panel>
+                <p:commandButton value="Criar" update="newExpenseForm,chartPanel" id="newExpenseBtn"
+                                 actionListener="#{expenseMBean.newExpense}"/>
+           
+            <p:panel id="chartPanel" header="Gráficos">
+            <p:pieChart id="chartByCategory" value="#{expenseMBean.pieChartModel}" legendPosition="e" fill="false" showDataLabels="true"  
+                        title="Contas por Categoria" style="width:400px;height:300px" sliceMargin="5" diameter="150" dataFormat="value" />  
+            </p:panel>
+       </h:form>
+    </h:body>
+</html>
+
